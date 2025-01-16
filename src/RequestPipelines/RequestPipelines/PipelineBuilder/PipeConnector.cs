@@ -1,4 +1,5 @@
 ﻿using RequestPipelines.Handlers;
+using RequestPipelines.PipelineExecution;
 
 namespace RequestPipelines.PipelineBuilder;
 
@@ -6,7 +7,7 @@ namespace RequestPipelines.PipelineBuilder;
 /// Соединитель конвейера.
 /// </summary>
 /// <typeparam name="TInput">Входящий тип.</typeparam>
-public readonly struct PipeConnector<TInput>
+public readonly struct PipeConnector<TInput>(Pipeline pipeline)
 {
     /// <summary>
     /// Добавить обработчик.
@@ -16,7 +17,8 @@ public readonly struct PipeConnector<TInput>
     /// <returns>Соединитель конвейера.</returns>
     public PipeConnector<TOutput> Add<TOutput>(IPipelineHandler<TInput, TOutput> handler)
     {
-        return new PipeConnector<TOutput>();
+        pipeline.Add(typeof(TInput), typeof(TOutput), handler.GetType(), handler);
+        return new PipeConnector<TOutput>(pipeline);
     }
     
     /// <summary>
@@ -27,6 +29,16 @@ public readonly struct PipeConnector<TInput>
     /// <returns>Соединитель конвейера.</returns>
     public PipeConnector<TOutput> Add<THandler, TOutput>() where THandler : IPipelineHandler<TInput, TOutput>
     {
-        return new PipeConnector<TOutput>();
+        pipeline.Add(typeof(TInput), typeof(TOutput), typeof(THandler));
+        return new PipeConnector<TOutput>(pipeline);
+    }
+
+    /// <summary>
+    /// Завершить последовательность обработчиков.
+    /// </summary>
+    /// <returns>Конвейер.</returns>
+    public PipelineExecutor Seal()
+    {
+        return pipeline.Seal();
     }
 }

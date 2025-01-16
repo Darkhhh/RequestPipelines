@@ -7,17 +7,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2cd7a17-ee85-4bd9-b43c-41049e535953" name="Changes" comment="(dev): HANDP-5 - добавлен соединитель для конвейера.">
-      <change afterPath="$PROJECT_DIR$/RequestPipelines.Tests/MSTestSettings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RequestPipelines.Tests/PipelineTests/PipeConnectorTests.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RequestPipelines.Tests/RequestPipelines.Tests.csproj" afterDir="false" />
+    <list default="true" id="b2cd7a17-ee85-4bd9-b43c-41049e535953" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/RequestPipelines/PipelineBuilder/Pipeline.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RequestPipelines/PipelineBuilder/PipelineElement.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RequestPipelines/PipelineExecution/PipelineExecutor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RequestPipelines/Resolvers/DefaultResolver.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RequestPipelines/Resolvers/IHandlerResolver.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RequestPipelines/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RequestPipelines/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RequestPipelines.sln" beforeDir="false" afterPath="$PROJECT_DIR$/RequestPipelines.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RequestPipelines/PipelineBuilder/PipeConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RequestPipelines/PipelineBuilder/PipeConnector.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -27,35 +33,36 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Darkhhh"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Darkhhh&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Darkhhh/RequestPipelines.git",
-    "accountId": "a4c34138-8309-464a-9719-afe005ac3c13"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Darkhhh/RequestPipelines.git&quot;,
+    &quot;accountId&quot;: &quot;a4c34138-8309-464a-9719-afe005ac3c13&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "Darkhhh",
-    "repository": "RequestPipelines"
+    &quot;owner&quot;: &quot;Darkhhh&quot;,
+    &quot;repository&quot;: &quot;RequestPipelines&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c73b3c6c598640c592fd3c6fa226c286e90908/f8/24782c1f/Type.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://E:/Projects/GitHub/RequestPipelines/src/RequestPipelines/RequestPipelines/Handlers/IPipelineHandler.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2rhcWE7wZoD0wqZgb3neGKvdHuC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -63,9 +70,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    ".NET Project.Runner.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "tests/HANDP-6",
+    "git-widget-placeholder": "dev/HANDP-7",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -75,7 +83,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="1b42f1a4-b5f9-4eeb-8694-1a641cc8b3f0">
+  <component name="RunManager">
     <configuration name="Runner" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -153,6 +161,25 @@
     <MESSAGE value="(dev): HANDP-3 - инициализация проекта." />
     <MESSAGE value="(dev): HANDP-4 - добавлены интерфейсы обработчиков." />
     <MESSAGE value="(dev): HANDP-5 - добавлен соединитель для конвейера." />
-    <option name="LAST_COMMIT_MESSAGE" value="(dev): HANDP-5 - добавлен соединитель для конвейера." />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Runner/Program.cs</url>
+          <line>16</line>
+          <properties documentPath="E:\Projects\GitHub\RequestPipelines\src\RequestPipelines\Runner\Program.cs" containingFunctionPresentation="">
+            <startOffsets>
+              <option value="379" />
+            </startOffsets>
+            <endOffsets>
+              <option value="414" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
