@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestPipelines", "Request
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestPipelines.Tests", "RequestPipelines.Tests\RequestPipelines.Tests.csproj", "{7D34F057-538F-4057-87E3-3A1FDEA7E04B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runner", "Runner\Runner.csproj", "{CA364BD8-922E-475E-9297-133EFB5B1943}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7D34F057-538F-4057-87E3-3A1FDEA7E04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D34F057-538F-4057-87E3-3A1FDEA7E04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D34F057-538F-4057-87E3-3A1FDEA7E04B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA364BD8-922E-475E-9297-133EFB5B1943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA364BD8-922E-475E-9297-133EFB5B1943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA364BD8-922E-475E-9297-133EFB5B1943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA364BD8-922E-475E-9297-133EFB5B1943}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
