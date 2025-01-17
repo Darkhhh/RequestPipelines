@@ -42,6 +42,7 @@ Generated\ Files/
 
 # Rider
 .idea/
+**/.idea/workspace.xml
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
