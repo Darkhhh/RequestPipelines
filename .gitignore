@@ -45,6 +45,7 @@ Generated\ Files/
 */.idea/
 **/.idea/
 .src/RequestPipelines/.idea/
+**/.idea/**/**/*.xml
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
