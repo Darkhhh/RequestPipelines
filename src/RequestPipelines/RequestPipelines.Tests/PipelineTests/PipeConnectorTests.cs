@@ -4,12 +4,12 @@ using RequestPipelines.PipelineBuilder;
 namespace RequestPipelines.Tests.PipelineTests;
 
 [TestClass]
-public class PipeConnectorTests
+public class PipeConnectorTests : TestClassBase
 {
     [TestMethod]
     public void Add_WithInstances_Success()
     {
-        _ = new PipeConnector<Model1>()
+        _ = new PipeConnector<Model1>(GetMock<Pipeline>().Object)
             .Add(new Handler1())
             .Add(new Handler2());
     }
@@ -17,7 +17,7 @@ public class PipeConnectorTests
     [TestMethod]
     public void Add_WithoutInstances_Success()
     {
-        _ = new PipeConnector<Model1>()
+        _ = new PipeConnector<Model1>(GetMock<Pipeline>().Object)
             .Add<Handler1, Model2>()
             .Add<Handler2, Model3>();
     }
