@@ -42,7 +42,9 @@ Generated\ Files/
 
 # Rider
 .idea/
-**/.idea/workspace.xml
+*/.idea/
+**/.idea/
+.src/RequestPipelines/.idea/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
