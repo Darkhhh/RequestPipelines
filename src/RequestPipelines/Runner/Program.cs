@@ -1,54 +1,20 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using RequestPipelines.PipelineBuilder;
+using Runner.Example.Handlers;
+using Runner.Example.Models;
 
-using RequestPipelines.Handlers;
-using RequestPipelines.PipelineBuilder;
-
-Console.WriteLine("Hello, World!");
+var initModel = new Model1
+{
+    SomeInteger = 15
+};
 
 var pipeline = Pipeline
     .Create()
-    .Process<Model1>(new Model1())
+    .Process<Model1>(initModel)
     .Add<Handler1, Model2>()
     .Add<Handler2, Model3>()
     .Add<Handler3, Model3>()
-    .SealWith<Handler4, Model4>()
-    .Execute();
+    .SealWith<Handler4, Model4>();
 
-Console.WriteLine("Hello, World!");
+var result = pipeline.Execute();
 
-struct Model1;
-struct Model2;
-struct Model3;
-struct Model4;
-
-class Handler1 : PipelineHandler<Model1, Model2>
-{
-    public override Model2 Handle(Model1 request)
-    {
-        return new Model2();
-    }
-}
-
-class Handler2 : PipelineHandler<Model2, Model3>
-{
-    public override Model3 Handle(Model2 request)
-    {
-        return new Model3();
-    }
-}
-
-class Handler3 : PipelineHandler<Model3, Model3>
-{
-    public override Model3 Handle(Model3 request)
-    {
-        return new Model3();
-    }
-}
-
-class Handler4 : PipelineHandler<Model3, Model4>
-{
-    public override Model4 Handle(Model3 request)
-    {
-        return new Model4();
-    }
-}
+Console.WriteLine(result.SomeDouble);
