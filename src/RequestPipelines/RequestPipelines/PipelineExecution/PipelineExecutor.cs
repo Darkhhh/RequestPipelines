@@ -1,17 +1,22 @@
-﻿using RequestPipelines.PipelineBuilder;
+﻿namespace RequestPipelines.PipelineExecution;
 
-namespace RequestPipelines.PipelineExecution;
-
-public class PipelineExecutor
+/// <summary>
+/// Исполнитель конвейера.
+/// </summary>
+/// <typeparam name="TResult">Тип получаемого результата.</typeparam>
+public class PipelineExecutor<TResult> : IPipelineExecutor<TResult>
 {
-    private readonly Type _requestType;
-    private readonly object _request;
-    private readonly LinkedList<PipelineElement> _pipeline;
+    /// <summary>
+    /// Конвейер.
+    /// </summary>
+    private readonly Func<TResult> _pipeline;
 
-    internal PipelineExecutor(Type requestType, object request, LinkedList<PipelineElement> pipeline)
-    {
-        _requestType = requestType;
-        _request = request;
-        _pipeline = pipeline;
-    }
+    /// <inheritdoc />
+    public TResult Execute() => _pipeline();
+
+    /// <summary>
+    /// Инициализация экземпляра класса <see cref="PipelineExecutor{T}"/>.
+    /// </summary>
+    /// <param name="pipeline">Конвейер.</param>
+    internal PipelineExecutor(Func<TResult> pipeline) => _pipeline = pipeline;
 }
