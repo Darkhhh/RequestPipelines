@@ -11,8 +11,8 @@ var pipeline = Pipeline
     .Add<Handler1, Model2>()
     .Add<Handler2, Model3>()
     .Add<Handler3, Model3>()
-    .Add<Handler4, Model4>()
-    .Seal();
+    .SealWith<Handler4, Model4>()
+    .Execute();
 
 Console.WriteLine("Hello, World!");
 
@@ -21,34 +21,34 @@ struct Model2;
 struct Model3;
 struct Model4;
 
-class Handler1 : IPipelineHandler<Model1, Model2>
+class Handler1 : PipelineHandler<Model1, Model2>
 {
-    public Model2 Handle(Model1 request)
+    public override Model2 Handle(Model1 request)
     {
-        throw new NotImplementedException();
+        return new Model2();
     }
 }
 
-class Handler2 : IPipelineHandler<Model2, Model3>
+class Handler2 : PipelineHandler<Model2, Model3>
 {
-    public Model3 Handle(Model2 request)
+    public override Model3 Handle(Model2 request)
     {
-        throw new NotImplementedException();
+        return new Model3();
     }
 }
 
-class Handler3 : IPipelineHandler<Model3, Model3>
+class Handler3 : PipelineHandler<Model3, Model3>
 {
-    public Model3 Handle(Model3 request)
+    public override Model3 Handle(Model3 request)
     {
-        throw new NotImplementedException();
+        return new Model3();
     }
 }
 
-class Handler4 : IPipelineHandler<Model3, Model4>
+class Handler4 : PipelineHandler<Model3, Model4>
 {
-    public Model4 Handle(Model3 request)
+    public override Model4 Handle(Model3 request)
     {
-        throw new NotImplementedException();
+        return new Model4();
     }
 }

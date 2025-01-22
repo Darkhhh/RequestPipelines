@@ -1,17 +1,13 @@
-﻿using RequestPipelines.PipelineBuilder;
+﻿namespace RequestPipelines.PipelineExecution;
 
-namespace RequestPipelines.PipelineExecution;
-
-public class PipelineExecutor
+public class PipelineExecutor<TResult>
 {
-    private readonly Type _requestType;
-    private readonly object _request;
-    private readonly LinkedList<PipelineElement> _pipeline;
+    private readonly Func<TResult> _pipeline;
 
-    internal PipelineExecutor(Type requestType, object request, LinkedList<PipelineElement> pipeline)
+    public TResult Execute() => _pipeline();
+
+    internal PipelineExecutor(Func<TResult> pipeline)
     {
-        _requestType = requestType;
-        _request = request;
         _pipeline = pipeline;
     }
 }
