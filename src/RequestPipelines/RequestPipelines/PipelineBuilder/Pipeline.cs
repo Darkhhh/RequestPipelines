@@ -73,7 +73,7 @@ public class Pipeline(IHandlerResolver resolver)
     /// Закончить построение конвейера. 
     /// </summary>
     /// <returns>Исполнитель конвейера.</returns>
-    internal PipelineExecutor<TResult> AddFinalExpression<TResult>(Expression expression)
+    internal IPipelineExecutor<TResult> AddFinalExpression<TResult>(Expression expression)
     {
         _expressions.Add(expression);
         

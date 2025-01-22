@@ -33,7 +33,7 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     /// <typeparam name="THandler">Тип обработчика.</typeparam>
     /// <typeparam name="TOutput">Тип результата, возвращаемого обработчиком.</typeparam>
     /// <returns>Конвейер.</returns>
-    public PipelineExecutor<TOutput> SealWith<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
+    public IPipelineExecutor<TOutput> SealWith<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
     {
         var handler = pipeline.Resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
         if (handler is null) throw new NullReferenceException("Handler is null");
