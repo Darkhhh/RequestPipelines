@@ -12,33 +12,34 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     /// <summary>
     /// Добавить обработчик.
     /// </summary>
-    /// <param name="handler">Обработчик.</param>
-    /// <typeparam name="TOutput">Тип результата, возвращаемого обработчиком.</typeparam>
-    /// <returns>Соединитель конвейера.</returns>
-    public PipeConnector<TOutput> Add<TOutput>(IPipelineHandler<TInput, TOutput> handler)
-    {
-        pipeline.Add(typeof(TInput), typeof(TOutput), handler.GetType(), handler);
-        return new PipeConnector<TOutput>(pipeline);
-    }
-    
-    /// <summary>
-    /// Добавить обработчик.
-    /// </summary>
     /// <typeparam name="THandler">Тип обработчика.</typeparam>
     /// <typeparam name="TOutput">Тип результата, возвращаемого обработчиком.</typeparam>
     /// <returns>Соединитель конвейера.</returns>
-    public PipeConnector<TOutput> Add<THandler, TOutput>() where THandler : IPipelineHandler<TInput, TOutput>
+    public PipeConnector<TOutput> Add<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
     {
-        pipeline.Add(typeof(TInput), typeof(TOutput), typeof(THandler));
+        var handler = pipeline.Resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
+        if (handler is null) throw new NullReferenceException("Handler is null");
+
+        var expression = handler.BuildExpression(pipeline.CurrentInputParameter);
+        var variable = handler.GetOutputVariableExpression();
+        
+        pipeline.AddExpression(expression, variable);
         return new PipeConnector<TOutput>(pipeline);
     }
 
     /// <summary>
     /// Завершить последовательность обработчиков.
     /// </summary>
+    /// <typeparam name="THandler">Тип обработчика.</typeparam>
+    /// <typeparam name="TOutput">Тип результата, возвращаемого обработчиком.</typeparam>
     /// <returns>Конвейер.</returns>
-    public PipelineExecutor Seal()
+    public IPipelineExecutor<TOutput> SealWith<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
     {
-        return pipeline.Seal();
+        var handler = pipeline.Resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
+        if (handler is null) throw new NullReferenceException("Handler is null");
+
+        var expression = handler.BuildExpression(pipeline.CurrentInputParameter);
+        
+        return pipeline.AddFinalExpression<TOutput>(expression);
     }
 }
