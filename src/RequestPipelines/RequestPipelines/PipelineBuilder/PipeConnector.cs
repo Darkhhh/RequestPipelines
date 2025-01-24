@@ -1,4 +1,5 @@
-﻿using RequestPipelines.Handlers;
+﻿using System.Linq.Expressions;
+using RequestPipelines.Handlers;
 using RequestPipelines.PipelineExecution;
 
 namespace RequestPipelines.PipelineBuilder;
@@ -41,5 +42,33 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
         var expression = handler.BuildExpression(pipeline.CurrentInputParameter);
         
         return pipeline.AddFinalExpression<TOutput>(expression);
+    }
+
+    /// <summary>
+    /// Добавить промежуточное действие.
+    /// </summary>
+    /// <param name="action">Действие.</param>
+    /// <returns>Соединитель конвейера.</returns>
+    public PipeConnector<TInput> AddAction(Action<TInput> action)
+    {
+        Expression<Action<TInput>> expression = x => action(x);
+        var invoke = Expression.Invoke(expression, pipeline.CurrentInputParameter);
+        pipeline.AddExpression(invoke);
+        
+        return new PipeConnector<TInput>(pipeline);
+    }
+
+    /// <summary>
+    /// Добавить промежуточное действие.
+    /// </summary>
+    /// <param name="action">Действие.</param>
+    /// <returns>Соединитель конвейера.</returns>
+    public PipeConnector<TInput> AddAction(Action action)
+    {
+        Expression<Action> expression = () => action();
+        var invoke = Expression.Invoke(expression);
+        pipeline.AddExpression(invoke);
+        
+        return new PipeConnector<TInput>(pipeline);
     }
 }
