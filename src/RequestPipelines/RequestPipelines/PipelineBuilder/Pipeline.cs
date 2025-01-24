@@ -83,4 +83,13 @@ public class Pipeline(IHandlerResolver resolver)
 
         return new PipelineExecutor<TResult>(lambda);
     }
+
+    /// <summary>
+    /// Добавить выражение в блок.
+    /// </summary>
+    /// <param name="expression">Выражение.</param>
+    internal void AddExpression(Expression expression)
+    {
+        _expressions.Add(expression);
+    }
 }
