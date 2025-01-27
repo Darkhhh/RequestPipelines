@@ -40,6 +40,13 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
+# Rider
+.idea/
+*/.idea/
+**/.idea/
+.src/RequestPipelines/.idea/
+**/.idea/**/**/*.xml
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
