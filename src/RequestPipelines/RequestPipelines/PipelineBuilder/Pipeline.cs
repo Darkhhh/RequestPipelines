@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using RequestPipelines.PipelineExecution;
-using RequestPipelines.Resolvers;
+﻿using RequestPipelines.Resolvers;
 
 namespace RequestPipelines.PipelineBuilder;
 
@@ -11,25 +9,10 @@ namespace RequestPipelines.PipelineBuilder;
 public class Pipeline(IHandlerResolver resolver)
 {
     /// <summary>
-    /// Переменные выражения.
+    /// Сборщик конвейера.
     /// </summary>
-    private readonly List<ParameterExpression> _variables = new();
-    
-    /// <summary>
-    /// Выражения.
-    /// </summary>
-    private readonly List<Expression> _expressions = new();
+    private readonly IPipelineHelper _pipelineHelper = new PipelineHelper();
 
-    /// <summary>
-    /// Текущий параметр.
-    /// </summary>
-    internal Expression CurrentInputParameter { get; private set; } = null!;
-    
-    /// <summary>
-    /// Фабрика обработчиков.
-    /// </summary>
-    internal IHandlerResolver Resolver => resolver;
-    
     /// <summary>
     /// Инициализация экземпляра класса <see cref="Pipeline"/>.
     /// </summary>
@@ -43,8 +26,8 @@ public class Pipeline(IHandlerResolver resolver)
     /// <returns>Соединитель конвейера.</returns>
     public PipeConnector<TRequest> Process<TRequest>(TRequest request)
     {
-        CurrentInputParameter = Expression.Constant(request, typeof(TRequest));
-        return new PipeConnector<TRequest>(this);
+        _pipelineHelper.SetCurrentInputParameter(request, typeof(TRequest));
+        return new PipeConnector<TRequest>(_pipelineHelper, resolver);
     }
 
     /// <summary>
@@ -55,41 +38,5 @@ public class Pipeline(IHandlerResolver resolver)
     public static Pipeline Create(IHandlerResolver? resolver = null)
     {
         return resolver is null ? new Pipeline() : new Pipeline(resolver);
-    }
-
-    /// <summary>
-    /// Добавить обработчик цепи.
-    /// </summary>
-    /// <param name="expression">Выражение вызова метода.</param>
-    /// <param name="variable">Выражение получаемой переменной.</param>
-    internal void AddExpression(Expression expression, ParameterExpression variable)
-    {
-        _variables.Add(variable);
-        _expressions.Add(Expression.Assign(variable, expression));
-        CurrentInputParameter = variable;
-    }
-
-    /// <summary>
-    /// Закончить построение конвейера. 
-    /// </summary>
-    /// <returns>Исполнитель конвейера.</returns>
-    internal IPipelineExecutor<TResult> AddFinalExpression<TResult>(Expression expression)
-    {
-        _expressions.Add(expression);
-        
-        var block = Expression.Block(_variables, _expressions);
-        
-        var lambda = Expression.Lambda<Func<TResult>>(block).Compile();
-
-        return new PipelineExecutor<TResult>(lambda);
-    }
-
-    /// <summary>
-    /// Добавить выражение в блок.
-    /// </summary>
-    /// <param name="expression">Выражение.</param>
-    internal void AddExpression(Expression expression)
-    {
-        _expressions.Add(expression);
     }
 }
