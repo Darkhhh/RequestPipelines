@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using RequestPipelines.Handlers;
 using RequestPipelines.PipelineExecution;
+using RequestPipelines.Resolvers;
 
 namespace RequestPipelines.PipelineBuilder;
 
@@ -8,8 +9,22 @@ namespace RequestPipelines.PipelineBuilder;
 /// Соединитель конвейера.
 /// </summary>
 /// <typeparam name="TInput">Входящий тип.</typeparam>
-public readonly struct PipeConnector<TInput>(Pipeline pipeline)
+public readonly struct PipeConnector<TInput>
 {
+    private readonly IPipelineHelper _pipelineHelper;
+    private readonly IHandlerResolver _resolver;
+
+    /// <summary>
+    /// Инициализация <see cref="PipeConnector{T}"/>.
+    /// </summary>
+    /// <param name="pipelineHelper">Сборщик конвейера.</param>
+    /// <param name="resolver">Производитель обработчиков.</param>
+    internal PipeConnector(IPipelineHelper pipelineHelper, IHandlerResolver resolver)
+    {
+        _pipelineHelper = pipelineHelper;
+        _resolver = resolver;
+    }
+    
     /// <summary>
     /// Добавить обработчик.
     /// </summary>
@@ -18,14 +33,14 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     /// <returns>Соединитель конвейера.</returns>
     public PipeConnector<TOutput> Add<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
     {
-        var handler = pipeline.Resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
+        var handler = _resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
         if (handler is null) throw new NullReferenceException("Handler is null");
 
-        var expression = handler.BuildExpression(pipeline.CurrentInputParameter);
+        var expression = handler.BuildExpression(_pipelineHelper.GetCurrentInputParameter());
         var variable = handler.GetOutputVariableExpression();
         
-        pipeline.AddExpression(expression, variable);
-        return new PipeConnector<TOutput>(pipeline);
+        _pipelineHelper.AddExpression(expression, variable);
+        return new PipeConnector<TOutput>(_pipelineHelper, _resolver);
     }
 
     /// <summary>
@@ -36,12 +51,12 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     /// <returns>Конвейер.</returns>
     public IPipelineExecutor<TOutput> SealWith<THandler, TOutput>() where THandler : PipelineHandler<TInput, TOutput>
     {
-        var handler = pipeline.Resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
+        var handler = _resolver.Resolve(typeof(THandler)) as PipelineHandler<TInput, TOutput>;
         if (handler is null) throw new NullReferenceException("Handler is null");
 
-        var expression = handler.BuildExpression(pipeline.CurrentInputParameter);
+        var expression = handler.BuildExpression(_pipelineHelper.GetCurrentInputParameter());
         
-        return pipeline.AddFinalExpression<TOutput>(expression);
+        return _pipelineHelper.AddFinalExpression<TOutput>(expression);
     }
 
     /// <summary>
@@ -52,10 +67,10 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     public PipeConnector<TInput> AddAction(Action<TInput> action)
     {
         Expression<Action<TInput>> expression = x => action(x);
-        var invoke = Expression.Invoke(expression, pipeline.CurrentInputParameter);
-        pipeline.AddExpression(invoke);
+        var invoke = Expression.Invoke(expression, _pipelineHelper.GetCurrentInputParameter());
+        _pipelineHelper.AddExpression(invoke);
         
-        return new PipeConnector<TInput>(pipeline);
+        return new PipeConnector<TInput>(_pipelineHelper, _resolver);
     }
 
     /// <summary>
@@ -67,8 +82,8 @@ public readonly struct PipeConnector<TInput>(Pipeline pipeline)
     {
         Expression<Action> expression = () => action();
         var invoke = Expression.Invoke(expression);
-        pipeline.AddExpression(invoke);
+        _pipelineHelper.AddExpression(invoke);
         
-        return new PipeConnector<TInput>(pipeline);
+        return new PipeConnector<TInput>(_pipelineHelper, _resolver);
     }
 }
